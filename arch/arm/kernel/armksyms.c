@@ -153,7 +153,7 @@ EXPORT_SYMBOL(mcount);
 #endif
 EXPORT_SYMBOL(__gnu_mcount_nc);
 #endif
-
+extern unsigned long __pv_phys_offset;
 #ifdef CONFIG_ARM_PATCH_PHYS_VIRT
 EXPORT_SYMBOL(__pv_phys_offset);
 #endif
