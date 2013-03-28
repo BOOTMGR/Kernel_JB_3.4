@@ -506,7 +506,7 @@ static void __init msm_device_i2c_2_init(void)
 
 static struct msm_i2c_platform_data qup_i2c_pdata = {
 	.clk_freq = 384000,
-	.pclk = "camif_pad_pclk",
+//	.pclk = "camif_pad_pclk",
 	.msm_i2c_config_gpio = qup_i2c_gpio_config,
 };
 
@@ -553,7 +553,7 @@ static void msm7x30_init_uart2(void)
 #endif
 
 static struct msm_spm_platform_data msm_spm_data __initdata = {
-	.reg_base_addr = MSM_SAW_BASE,
+	.reg_base_addr = MSM_SAW0_BASE,
 
 	.reg_init_values[MSM_SPM_REG_SAW_CFG] = 0x05,
 	.reg_init_values[MSM_SPM_REG_SAW_SPM_CTL] = 0x18,
@@ -597,7 +597,8 @@ static void __init msm7x30_init(void)
 
 	soc_version = socinfo_get_version();
 
-	msm_clock_init(msm_clocks_7x30, msm_num_clocks_7x30);
+//	msm_clock_init(msm_clocks_7x30, msm_num_clocks_7x30);
+	msm_clock_init(&msm7x30_clock_init_data);
 #ifdef CONFIG_SERIAL_MSM_CONSOLE
 	if (lge_get_uart_mode())
 		msm7x30_init_uart2();
@@ -699,7 +700,7 @@ MACHINE_START(MSM8X55_VICTOR, "LGE MSM8X55 VICTOR")
 	.phys_io  = MSM_DEBUG_UART_PHYS,
 	.io_pg_offst = ((MSM_DEBUG_UART_BASE) >> 18) & 0xfffc,
 #endif
-	.boot_params = PHYS_OFFSET + 0x100,
+	.atag_offset = PHYS_OFFSET + 0x100,
 	.map_io = msm7x30_map_io,
 	.init_irq = msm7x30_init_irq,
 	.init_machine = msm7x30_init,
