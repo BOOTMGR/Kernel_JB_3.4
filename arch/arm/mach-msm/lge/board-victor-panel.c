@@ -364,6 +364,7 @@ static struct platform_device lcdc_lgdisplay_panel_device = {
 
 static struct msm_panel_common_pdata mdp_pdata = {
 	.mdp_core_clk_rate = 122880000,
+	.mdp_max_clk = 192000000,
 };
 
 static struct notifier_block msm_fb_event_notifier = {
