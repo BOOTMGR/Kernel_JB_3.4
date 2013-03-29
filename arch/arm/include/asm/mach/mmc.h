@@ -128,6 +128,7 @@ struct msm_mmc_bus_voting_data {
 };
 
 struct mmc_platform_data {
+	int dummy52_required;
 	unsigned int ocr_mask;			/* available voltages */
 	int built_in;				/* built-in device flag */
 	int card_present;			/* card detect state */
