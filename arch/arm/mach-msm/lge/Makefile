@@ -16,7 +16,7 @@ obj-$(CONFIG_MACH_LGE) += devices_lge.o
 
 obj-$(CONFIG_LGE_HEADSET_MAX14579) += lge_headset_MAX14579.o
 obj-$(CONFIG_LGE_PROC_COMM) += lge_proc_comm.o
-obj-$(CONFIG_LGE_PROC_COMM) += lge_ftm.o
+#obj-$(CONFIG_LGE_PROC_COMM) += lge_ftm.o
 
 #obj-$(CONFIG_LGE_SUPPORT_AT_CMD) += lge_ats.o
 #obj-$(CONFIG_LGE_SUPPORT_AT_CMD) += lge_ats_cmd.o
