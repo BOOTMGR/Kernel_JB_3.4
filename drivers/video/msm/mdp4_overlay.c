@@ -1721,7 +1721,7 @@ void mdp4_overlay_borderfill_stage_up(struct mdp4_overlay_pipe *pipe)
 	else if (ctrl->panel_mode & MDP4_PANEL_LCDC)
 		mdp4_lcdc_base_swap(0, pipe);
 	else if (ctrl->panel_mode & MDP4_PANEL_DTV)
-		mdp4_dtv_base_swap(0, pipe);
+		mdp4_dtv_base_swap(pipe);
 
 	mdp4_overlay_reg_flush(bspipe, 1);
 	/* borderfill pipe as base layer */
@@ -1775,7 +1775,7 @@ void mdp4_overlay_borderfill_stage_down(struct mdp4_overlay_pipe *pipe)
 	else if (ctrl->panel_mode & MDP4_PANEL_LCDC)
 		mdp4_lcdc_base_swap(0, bspipe);
 	else if (ctrl->panel_mode & MDP4_PANEL_DTV)
-		mdp4_dtv_base_swap(0, bspipe);
+		mdp4_dtv_base_swap(bspipe);
 
 	/* free borderfill pipe */
 	mdp4_overlay_reg_flush(pipe, 1);
