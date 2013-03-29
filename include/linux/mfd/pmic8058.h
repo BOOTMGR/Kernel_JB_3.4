@@ -86,8 +86,10 @@
 #define PM8058_RTC_ALARM_IRQ		PM8058_IRQ_BLOCK_BIT(4, 7)
 #define PM8058_PWRKEY_REL_IRQ		PM8058_IRQ_BLOCK_BIT(6, 2)
 #define PM8058_PWRKEY_PRESS_IRQ		PM8058_IRQ_BLOCK_BIT(6, 3)
-#define PM8058_KEYPAD_IRQ		PM8058_IRQ_BLOCK_BIT(9, 2)
-#define PM8058_KEYSTUCK_IRQ		PM8058_IRQ_BLOCK_BIT(9, 3)
+//#define PM8058_KEYPAD_IRQ		PM8058_IRQ_BLOCK_BIT(9, 2)
+//#define PM8058_KEYSTUCK_IRQ		PM8058_IRQ_BLOCK_BIT(9, 3)
+#define PM8058_KEYPAD_IRQ(base)		((base) + PM8058_IRQ_BLOCK_BIT(9, 2))
+#define PM8058_KEYSTUCK_IRQ(base)	((base) + PM8058_IRQ_BLOCK_BIT(9, 3))
 #define PM8058_BATT_ALARM_IRQ		PM8058_IRQ_BLOCK_BIT(5, 6)
 #define PM8058_SW_0_IRQ			PM8058_IRQ_BLOCK_BIT(7, 1)
 #define PM8058_IR_0_IRQ			PM8058_IRQ_BLOCK_BIT(7, 0)
@@ -128,6 +130,7 @@ struct pm8058_platform_data {
 	struct pm8058_xo_pdata			*xo_buffer_pdata;
 	int					num_xo_buffers;
 	struct pmic8058_charger_data		*charger_pdata;
+	struct mfd_cell				*sub_devices;
 };
 
 #endif  /* __MFD_PMIC8058_H__ */

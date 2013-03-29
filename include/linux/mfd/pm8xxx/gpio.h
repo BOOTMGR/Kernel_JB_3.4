@@ -30,6 +30,7 @@ struct pm8xxx_gpio_core_data {
 struct pm8xxx_gpio_platform_data {
 	struct pm8xxx_gpio_core_data	gpio_cdata;
 	int				gpio_base;
+	int	(*init)(void);
 };
 
 /* GPIO parameters */
