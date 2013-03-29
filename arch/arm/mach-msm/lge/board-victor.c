@@ -577,10 +577,12 @@ static struct msm_spm_platform_data msm_spm_data __initdata = {
 	.vctl_timeout_us = 50,
 };
 
+
 static struct msm_acpu_clock_platform_data msm7x30_clock_data = {
 	.acpu_switch_time_us = 50,
 	.vdd_switch_time_us = 62,
 };
+
 
 static void __init msm7x30_init_irq(void)
 {
