@@ -40,6 +40,11 @@ struct msm_gpio {
 	const char *label;
 };
 
+static inline void gpio_set_value(unsigned gpio, int value)
+{
+	__gpio_set_value(gpio, value);
+}
+
 /**
  * msm_gpios_request_enable() - request and enable set of GPIOs
  *
