@@ -40,6 +40,11 @@ struct msm_gpio {
 	const char *label;
 };
 
+static inline int gpio_get_value(unsigned gpio)
+{
+	return __gpio_get_value(gpio);
+}
+
 static inline void gpio_set_value(unsigned gpio, int value)
 {
 	__gpio_set_value(gpio, value);
