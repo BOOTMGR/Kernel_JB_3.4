@@ -360,8 +360,8 @@ static struct mfd_cell pwrkey_cell __devinitdata = {
 };
 
 static const struct resource resources_keypad[] = {
-	SINGLE_IRQ_RESOURCE(NULL, PM8058_KEYPAD_IRQ),
-	SINGLE_IRQ_RESOURCE(NULL, PM8058_KEYSTUCK_IRQ),
+	SINGLE_IRQ_RESOURCE(NULL, PM8058_KEYPAD_IRQ_new),
+	SINGLE_IRQ_RESOURCE(NULL, PM8058_KEYSTUCK_IRQ_new),
 };
 
 static struct mfd_cell keypad_cell __devinitdata = {
