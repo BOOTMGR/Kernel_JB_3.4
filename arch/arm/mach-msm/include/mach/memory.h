@@ -48,7 +48,19 @@
 
 extern unsigned long ebi1_phys_offset;
 
+#ifdef CONFIG_MACH_MSM8X55_VICTOR
+/* memory of victor is separated to three region.
+ * 	first is 0x20000000 ~ 0x03e00000
+ * 	second is 0x07a00000 ~ 0x10000000
+ * 	thired is 0x20000000 ~ 0x30000000
+ * region of 0x10000000 ~ 0x20000000 is hole.
+ * EBI1_PHYS_OFFSET should indicate the end of hole.
+ * 2010-01-18, cleaneye.kim@lge.com
+ */
+#define EBI1_PHYS_OFFSET 0x20000000
+#else
 #define EBI1_PHYS_OFFSET (ebi1_phys_offset)
+#endif
 #define EBI1_PAGE_OFFSET (EBI0_PAGE_OFFSET + EBI0_SIZE)
 
 #if (defined(CONFIG_SPARSEMEM) && defined(CONFIG_VMSPLIT_3G))

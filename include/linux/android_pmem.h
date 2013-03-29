@@ -117,6 +117,7 @@ struct android_pmem_platform_data
 	const char* name;
 	/* size of memory region */
 	unsigned long size;
+	unsigned long start;
 
 	enum pmem_allocator_type allocator_type;
 	/* treated as a 'hidden' variable in the board files. Can be

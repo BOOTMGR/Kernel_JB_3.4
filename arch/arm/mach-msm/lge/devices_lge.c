@@ -62,6 +62,11 @@
 /* setting board revision information */
 int lge_bd_rev;
 
+struct pm8xxx_gpio_init_info {
+	unsigned			gpio;
+	struct pm_gpio			config;
+};
+
 static int __init board_revno_setup(char *rev_info)
 {
 	char *rev_str[] = { "evb", "rev_a", "rev_b", "rev_c", "rev_d", "rev_e", "rev_f","rev_10","rev_11","rev_12","rev_13",};
@@ -473,32 +478,32 @@ void __init msm_add_pmem_devices(void)
 }
 /* pm pdata weak definition for hsusb initialization */
 __WEAK struct msm_pm_platform_data msm_pm_data[MSM_PM_SLEEP_MODE_NR] = {
-	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE].supported = 1,
+	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE].idle_supported = 1,
 	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE].suspend_enabled = 1,
 	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE].idle_enabled = 1,
 	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE].latency = 8594,
 	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE].residency = 23740,
 
-	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE_NO_XO_SHUTDOWN].supported = 1,
+	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE_NO_XO_SHUTDOWN].idle_supported = 1,
 	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE_NO_XO_SHUTDOWN].suspend_enabled = 1,
 	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE_NO_XO_SHUTDOWN].idle_enabled = 1,
 	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE_NO_XO_SHUTDOWN].latency = 4594,
 	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE_NO_XO_SHUTDOWN].residency = 23740,
 
-	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE_STANDALONE].supported = 1,
+	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE_STANDALONE].idle_supported = 1,
 	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE_STANDALONE].suspend_enabled = 0,
 	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE_STANDALONE].idle_enabled = 1,
 	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE_STANDALONE].latency = 500,
 	[MSM_PM_SLEEP_MODE_POWER_COLLAPSE_STANDALONE].residency = 6000,
 
-	[MSM_PM_SLEEP_MODE_RAMP_DOWN_AND_WAIT_FOR_INTERRUPT].supported = 1,
+	[MSM_PM_SLEEP_MODE_RAMP_DOWN_AND_WAIT_FOR_INTERRUPT].idle_supported = 1,
 	[MSM_PM_SLEEP_MODE_RAMP_DOWN_AND_WAIT_FOR_INTERRUPT].suspend_enabled
 		= 1,
 	[MSM_PM_SLEEP_MODE_RAMP_DOWN_AND_WAIT_FOR_INTERRUPT].idle_enabled = 0,
 	[MSM_PM_SLEEP_MODE_RAMP_DOWN_AND_WAIT_FOR_INTERRUPT].latency = 443,
 	[MSM_PM_SLEEP_MODE_RAMP_DOWN_AND_WAIT_FOR_INTERRUPT].residency = 1098,
 
-	[MSM_PM_SLEEP_MODE_WAIT_FOR_INTERRUPT].supported = 1,
+	[MSM_PM_SLEEP_MODE_WAIT_FOR_INTERRUPT].idle_supported = 1,
 	[MSM_PM_SLEEP_MODE_WAIT_FOR_INTERRUPT].suspend_enabled = 1,
 	[MSM_PM_SLEEP_MODE_WAIT_FOR_INTERRUPT].idle_enabled = 1,
 	[MSM_PM_SLEEP_MODE_WAIT_FOR_INTERRUPT].latency = 2,
@@ -624,6 +629,7 @@ void __init msm_qsd_spi_init(void)
 
 /* MSM HSUSB Controller Device */
 #ifdef CONFIG_USB_EHCI_MSM
+/*
 static void msm_hsusb_vbus_power(unsigned phy_info, int on)
 {
 	int rc;
@@ -639,12 +645,13 @@ static void msm_hsusb_vbus_power(unsigned phy_info, int on)
 		.inv_int_pol    = 0,
 	};
 
-	/* If VBUS is already on (or off), do nothing. */
+
+	
 	if (unlikely(on == vbus_is_on))
 		return;
 
 	if (on) {
-		rc = pm8058_gpio_config(36, &usb_vbus);
+		rc = pm8xxx_gpio_config(usb_vbus.gpio, &usb_vbus.config);
 		if (rc) {
 			pr_err("%s PMIC GPIO 36 write failed\n", __func__);
 			return;
@@ -655,6 +662,41 @@ static void msm_hsusb_vbus_power(unsigned phy_info, int on)
 	}
 
 	vbus_is_on = on;
+}
+*/
+static void msm_hsusb_vbus_power(unsigned phy_info, int on)
+{
+        int rc;
+        static int vbus_is_on;
+	struct pm8xxx_gpio_init_info usb_vbus = {
+		PM8058_GPIO_PM_TO_SYS(36),
+		{
+			.direction      = PM_GPIO_DIR_OUT,
+			.pull           = PM_GPIO_PULL_NO,
+			.output_buffer  = PM_GPIO_OUT_BUF_CMOS,
+			.output_value   = 1,
+			.vin_sel        = 2,
+			.out_strength   = PM_GPIO_STRENGTH_MED,
+			.function       = PM_GPIO_FUNC_NORMAL,
+			.inv_int_pol    = 0,
+		},
+	};
+
+        /* If VBUS is already on (or off), do nothing. */
+        if (unlikely(on == vbus_is_on))
+                return;
+
+        if (on) {
+		rc = pm8xxx_gpio_config(usb_vbus.gpio, &usb_vbus.config);
+		if (rc) {
+                        pr_err("%s PMIC GPIO 36 write failed\n", __func__);
+                        return;
+                }
+	} else {
+		gpio_set_value_cansleep(PM8058_GPIO_PM_TO_SYS(36), 0);
+	}
+
+        vbus_is_on = on;
 }
 
 static struct msm_usb_host_platform_data msm_usb_host_pdata = {
